@@ -1,5 +1,4 @@
-//AST.java
-
+// ExprArith.java
 
 abstract class ExprArith {
 
@@ -103,10 +102,10 @@ class  Number extends ExprArith{
 
     Number (int val) {
         this.val = val;
-    }//Number
+    }
     int eval () {
         return val;
-    }//eval
+    }
 }
 
 
@@ -145,11 +144,11 @@ class Oppose extends ExprBool {
 
     Oppose (ExprBool e) {
         this.e = e;
-    }//Oppose
+    }
 
     boolean eval () {
         return !e.eval();
-    }//eval
+    }
 }
 
 
@@ -171,11 +170,11 @@ class And extends BinOpBool {
 	And (ExprBool e1, ExprBool e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//And
+    }
 
     boolean eval () {
         return e1.eval()&&e2.eval();
-    }//eval
+    }
 }
 
 class Or extends BinOpBool {
@@ -183,10 +182,10 @@ class Or extends BinOpBool {
     Or (ExprBool e1, ExprBool e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//Or
+    }
     boolean eval () {
         return e1.eval()||e2.eval();
-    }//eval
+    }
 }
 
 class Superior extends BinOpBoolArith {
@@ -194,44 +193,44 @@ class Superior extends BinOpBoolArith {
 	Superior (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//Superior
+    }
 
     boolean eval () {
         return e1.eval()>e2.eval();
-    }//eval
+    }
 }
 
 class Inferior extends BinOpBoolArith {
 	Inferior (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//Inferior
+    }
 
     boolean eval () {
         return e1.eval()<e2.eval();
-    }//eval
+    }
 }
 
 class Egal extends BinOpBoolArith {
 	Egal (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//Egal
+    }
 
     boolean eval () {
         return e1.eval()==e2.eval();
-    }//eval
+    }
 }
 
 class Different extends BinOpBoolArith {
 	Different (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//Different
+    }
 
     boolean eval () {
         return !(e1.eval()==e2.eval());
-    }//eval
+    }
 
 }
 
@@ -240,11 +239,11 @@ class SuperiorEqual extends BinOpBoolArith {
     SuperiorEqual (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//SuperiorEqual
+    }
 
     boolean eval () {
         return (e1.eval()>=e2.eval());
-    }//eval
+    }
 
 }
 
@@ -253,11 +252,11 @@ class InferiorEqual extends BinOpBoolArith {
     InferiorEqual (ExprArith e1, ExprArith e2) {
         this.e1 = e1;
         this.e2 = e2;
-    }//InferiorEqual
+    }
 
     boolean eval () {
         return (e1.eval()<=e2.eval());
-    }//eval
+    }
 }
 
 
