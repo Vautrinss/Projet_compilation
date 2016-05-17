@@ -3,7 +3,7 @@
 grammar GrammarJB;
 
 // This will be the entry point of our parser.
-expr : (additionExpr | multiplyExpr) ;
+expr : (Type | X | boolExpr | atomExpr | additionExpr | multiplyExpr) ;
 
 // Addition and subtraction have the lowest precedence.
 additionExpr : multiplyExpr ('+' multiplyExpr | '-' multiplyExpr ) * ;
@@ -15,21 +15,23 @@ multiplyExpr : atomExpr ('*' atomExpr | '/' atomExpr ) * ;
    when we encounter parenthesis, we're making a recursive call back to the
    rule 'additionExpr'. As you can see, an 'atomExpr' has the highest
    precedence. */
-atomExpr : Number | '(' additionExpr ')' | '-' atomExpr ;
+atomExpr : X | Number | '(' additionExpr ')' | '-' atomExpr | X ;
 
 // relations binaires avec && et ||
 combinBinarExpr : bop ('and' bop | 'or' bop ) * ;
 
 
-boolExpr : Boolean | '(' combinBinarExpr ')' | bop | 'not' boolExpr ;
+boolExpr : Boolean |  combinBinarExpr | bop | 'not' boolExpr ;
 
+i:(cond | expr);
+cond : ('if' expr 'then' expr 'else' expr | 'while' expr 'do' i);
 
 
 //
 arrayExpr : 'new' Array '[' expr ']' ;
 
 //operateur binaire
-bop : atomExpr | ('<' atomExpr | '<=' atomExpr | '>' atomExpr | '>=' atomExpr | '!=' atomExpr | '=' atomExpr) ; 
+bop : atomExpr ('<' atomExpr | '<=' atomExpr | '>' atomExpr | '>=' atomExpr | '!=' atomExpr | '=' atomExpr) ; 
 
 appelExpr : ('read' | 'write' | 'f') ('(' expr ')') * ;
 
@@ -51,6 +53,9 @@ uop : ('0 -' Number) ;
 
 //
 Array : 'array' 'of' Type;
+
+// Variable (impossible de savoir pourquoi ya que grand X qui marche)
+X: [a-z]+ ;
 
 
 
