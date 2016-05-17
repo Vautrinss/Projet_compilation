@@ -1,15 +1,15 @@
-// ExprArith.g4
+// GrammarJB.g4
 
-grammar ExprArith;
+grammar GrammarJB;
 
 // This will be the entry point of our parser.
-expr : additionExpr ;
+expr : (additionExpr | multiplyExpr) ;
 
 // Addition and subtraction have the lowest precedence.
-additionExpr : multiplyExpr ('+' multiplyExpr | '-' multiplyExpr)* ;
+additionExpr : multiplyExpr ('+' multiplyExpr | '-' multiplyExpr ) * ;
 
 // Multiplication and division have a higher precedence.
-multiplyExpr : atomExpr ('*' atomExpr | '/' atomExpr)* ;
+multiplyExpr : atomExpr ('*' atomExpr | '/' atomExpr ) * ;
 
 /* An expression atom is the smallest part of an expression: a number. Or 
    when we encounter parenthesis, we're making a recursive call back to the
@@ -17,22 +17,21 @@ multiplyExpr : atomExpr ('*' atomExpr | '/' atomExpr)* ;
    precedence. */
 atomExpr : Number | '(' additionExpr ')' | '-' atomExpr ;
 
-//operateur binaire
-bop : atomExpr | ('<' atomExpr | '<=' atomExpr | '>' atomExpr | '>=' atomExpr | '!=' atomExpr | '=' atomExpr) ;
+// relations binaires avec && et ||
+combinBinarExpr : bop ('and' bop | 'or' bop ) * ;
 
-appelExpr : ('read' | 'write' | 'f') ('(' expr ')') * ; 
 
+boolExpr : Boolean | '(' combinBinarExpr ')' | bop | 'not' boolExpr ;
+
+
+
+//
 arrayExpr : 'new' Array '[' expr ']' ;
 
-combinatedBinarExpr : bop ('and' bop | 'or' bop ) * ;
+//operateur binaire
+bop : atomExpr | ('<' atomExpr | '<=' atomExpr | '>' atomExpr | '>=' atomExpr | '!=' atomExpr | '=' atomExpr) ; 
 
-boolExpr : Boolean | '(' combinatedBinarExpr ')' | bop | 'not' boolExpr ;
-
-
-
-
-
-
+appelExpr : ('read' | 'write' | 'f') ('(' expr ')') * ;
 
 // A number is an integer value
 Number : ('0'..'9')+ ;
@@ -40,17 +39,19 @@ Number : ('0'..'9')+ ;
 // Boolean true ou false
 Boolean : ('true' | 'false') ;
 
-//
-Array : 'array' 'of' Type;
-
 // Type demande
 Type : (Number | Boolean | Array) ;
 
 // Constante
 k : (Number | Boolean) ;
 
+
 // operateur unaire
 uop : ('0 -' Number) ;
+
+//
+Array : 'array' 'of' Type;
+
 
 
 
