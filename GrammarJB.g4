@@ -20,7 +20,7 @@ atomExpr : X | Number | '(' additionExpr ')' | '-' atomExpr | X ;
 // relations binaires avec && et ||
 combinBinarExpr : bop ('and' bop | 'or' bop ) * ;
 
-
+//uop deja pris en compte dans atomExpr et boolExpr
 
 boolExpr : Boolean |  combinBinarExpr | bop | 'not' boolExpr ;
 
