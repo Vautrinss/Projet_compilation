@@ -21,14 +21,21 @@ atomExpr : X | Number | '(' additionExpr ')' | '-' atomExpr | X ;
 combinBinarExpr : bop ('and' bop | 'or' bop ) * ;
 
 
+
 boolExpr : Boolean |  combinBinarExpr | bop | 'not' boolExpr ;
 
 i:(cond | expr);
 cond : ('if' expr 'then' expr 'else' expr | 'while' expr 'do' i);
 
+// fonction
+d: 'f('( X':' Type)* ')' 'var'(X':'Type)* i;
+
+//programme
+p : 'var'(X':'Type)* d* i;
 
 //
 arrayExpr : 'new' Array '[' expr ']' ;
+
 
 //operateur binaire
 bop : atomExpr ('<' atomExpr | '<=' atomExpr | '>' atomExpr | '>=' atomExpr | '!=' atomExpr | '=' atomExpr) ; 
@@ -42,7 +49,7 @@ Number : ('0'..'9')+ ;
 Boolean : ('true' | 'false') ;
 
 // Type demande
-Type : (Number | Boolean | Array) ;
+Type : (Number | Boolean | 'array' 'of' Type) ;
 
 // Constante
 k : (Number | Boolean) ;
