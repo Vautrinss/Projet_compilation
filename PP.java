@@ -384,6 +384,11 @@ class PPAssign extends PPInst {
         this.name = name;
         this.val = val;
     }//PPAssign
+    
+    UPPInst toUPP (ArrayList<String> locals){
+    	UPPExpr nval = val.toUPP(locals);
+    	return new UPPAssign(nval,name);
+   }//toUPP
 
 }//PPAssign
 
@@ -396,6 +401,14 @@ class PPArraySet extends PPInst {
         this.index = index;
         this.val = val;
     }//PPArraySet
+
+    UPPInst toUPP (ArrayList<String> locals) {	
+        UPPExpr narr = arr.toUPP(locals); //Convert the PP var in UPP var
+        UPPExpr nindex = index.toUPP(locals);
+        UPPExpr nval = val.toUPP(locals);
+        UPPExpr offset = new UPPMul(new UPPCte(4),nindex);
+	    return new UPPStore(new UPPAdd(narr,offset),nval);
+    }//toUPP
 
 }//PPArraySet
 
@@ -410,6 +423,13 @@ class PPCond extends PPInst {
         this.i2 = i2;
     }//PPCond
 
+    UPPInst toUPP (ArrayList<String> locals) {	
+        UPPExpr ncond = cond.toUPP(locals); //Convert the PP values in UPP values
+        UPPInst ni1 = i1.toUPP(locals);
+        UPPInst ni2 = i2.toUPP(locals);
+	    return new UPPCond(ncond,ni1,ni2);
+    }//toUPP
+
 }//PPCond
 
 class PPWhile extends PPInst {
@@ -422,6 +442,12 @@ class PPWhile extends PPInst {
         this.i = i;
     }//PPWhile
 
+    UPPInst toUPP (ArrayList<String> locals) {	
+        UPPExpr ncond = cond.toUPP(locals); //Convert the PP values in UPP values
+        UPPInst ni = i.toUPP(locals);
+	    return new UPPWhile(ncond,ni);
+    }//toUPP
+
 }//PPWhile
 
 class PPProcCall extends PPInst {
@@ -433,6 +459,14 @@ class PPProcCall extends PPInst {
         this.callee = callee;
         this.args = args;
     }//PPProcCall
+    
+	UPPInst toUPP(ArrayList<String> locals){
+	ArrayList<UPPInst> nargs = new ArrayList<UPPInst>();
+	    for (PPInst e : args){
+		    nargs.add(e.toUPP(locals));
+	}
+	return new UPPProcCall(callee,nargs);
+	}//toUPP
 
 }//PPProcCall
     
@@ -446,6 +480,12 @@ class PPSeq extends PPInst {
         this.i1 = i1;
         this.i2 = i2;
     }//PPSeq
+    
+    UPPInst toUPP(ArrayList<String> locals){
+        UPPInst ni1 = i1.toUPP(locals);
+        UPPInst ni2 = i2.toUPP(locals);
+        return new UPPSeq(ni1,ni2);
+    }//toUPP
 
 }//PPSeq
 
@@ -489,6 +529,25 @@ class PPFun extends PPDef {
         this.code = code;
         this.ret = ret;
     }//PPFun
+    
+    
+    
+    UPPDef toUPP(){
+        ArrayList<String> nargs = new ArrayList<String>();
+        ArrayList<String> nlocals = new ArrayList<String>();
+        ArrayList<String> nall = new ArrayList<String>();
+        UPPInst ncode;
+        for(Pair<String,Type> a : args){
+            nargs.add(a.left());
+            nall.add(a.left());
+        }
+        for(Pair<String,Type> e : locals){
+            nlocals.add(e.left());
+            nall.add(e.left());
+        }
+        ncode = code.toUPP(nall);
+        return new UPPFun(name, nargs, nlocals, ncode);
+    }//toUPP
 
 }//PPFun
 
@@ -501,6 +560,24 @@ class PPProc extends PPDef {
         this.locals = locals;
         this.code = code;
     }//PPProc
+    
+    
+    UPPDef toUPP(){
+    	ArrayList<String> nargs=new ArrayList<String>();
+    	ArrayList<String> nlocals=new ArrayList<String>();
+    	ArrayList<String> nall=new ArrayList<String>();
+    	UPPInst ncode;
+    	for(Pair<String,Type> a : args){
+    		nargs.add(a.left());
+    		nall.add(a.left());
+    	}
+    	for(Pair<String,Type> e : locals){
+    		nlocals.add(e.left());
+    		nall.add(e.left());
+    	}
+        UPPInst ncode = code.toUPP(nall);
+        return UPPProc(name,nargs,nlocals,ncode);
+    }//toUPP
 
 }//PPProc
 
@@ -520,5 +597,19 @@ class PPProg {
         this.defs = defs;
         this.code = code;
     }//PPProg
+
+    UPPProg toUPP(){
+        ArrayList<String> nglobals = new ArrayList<String>();
+        ArrayList<UPPDef> ndefs = new ArrayList<UPPDef>();
+        UPPInst ncode;
+        for(Pair<String,Type> e : locals){
+            nglobals.add(e.left);
+        }
+        for (PPDef e : defs){
+            ndefs.add(e.toUPP());
+        }
+        ncode = code.toUPP(new ArrayList<String>());
+        return new UPPProg(nglobals,ndefs,ncode); 
+    }//toUPP
 
 }//PPProg
