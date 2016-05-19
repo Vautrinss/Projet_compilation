@@ -75,7 +75,7 @@ class PPVar extends PPExpr {
     }//PPVar
 
     UPPExpr toUPP (ArrayList<String> locals) {
-	if locals.contains(name) {	
+	if (locals.contains(name)) {	
 	    return new UPPVar(name);
         }
         else {
@@ -358,16 +358,15 @@ class PPArrayAlloc extends PPExpr {
         this.size = size;
     }//PPArrayAlloc
 
-	UPPExpr toUPP(ArrayList<String> locals) {
-	   	UPPExpr toUPP(ArrayList<String> locals){
+	UPPExpr toUPP(ArrayList<String> locals){
 		UPPExpr nsize = size.toUPP(locals);
 		UPPExpr sizeBytes = new UPPMul(new UPPCte(4), nsize);
 		ArrayList<UPPExpr> args = new ArrayList<UPPExpr>();
 		args.add(sizeBytes);
 		return new UPPFunCall(new Alloc(), args);	
-	}//PPArayAlloc
-
-}//PPArrayAlloc
+	   }//PPArayAlloc
+    
+}
 
 /****************/
 /* Instructions */
@@ -612,4 +611,4 @@ class PPProg {
         return new UPPProg(nglobals,ndefs,ncode); 
     }//toUPP
 
-}//PPProg
+}
