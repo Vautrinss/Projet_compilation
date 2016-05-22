@@ -792,40 +792,4 @@ class PPProc extends PPDef {
 }//PPProc
 
 
-/************/
-/* Programs */
-/************/
-
-class PPProg {
-
-    ArrayList<Pair<String,Type>> globals;
-    ArrayList<PPDef> defs;
-    PPInst code;
-
-    PPProg (ArrayList<Pair<String,Type>> globals, ArrayList<PPDef> defs,
-          PPInst code) {
-        this.globals = globals;
-        this.defs = defs;
-        this.code = code;
-    }//PPProg
-
-    UPPProg toUPP(){
-        ArrayList<String> nglobals = new ArrayList<String>();
-        ArrayList<UPPDef> ndefs = new ArrayList<UPPDef>();
-        UPPInst ncode;
-        for(Pair<String,Type> e:globals){
-            nglobals.add(e.left);
-        }
-        for(PPDef a:defs){
-            ndefs.add(a.toUPP());
-        }
-        ncode = code.toUPP(new ArrayList<String>());
-        return new UPPProg(nglobals,ndefs,ncode); 
-    }//toUPP
-
-    public String toString(){
-        return   "var " + globals.toString() + " " + defs.toString() + " " + code.toString();
-    }
-}
-
 
