@@ -1,4 +1,6 @@
-// UPP.java
+//UPP
+//Baptiste Vautrin
+//Jean Bruté de Rémur
 
 import java.util.*;
 
@@ -8,7 +10,7 @@ import java.util.*;
 
 abstract class UPPExpr {
     
-    public abstract String toString(); //Printer for UPP
+    public abstract String toString();
     
 }//UPPExpr
 
@@ -155,7 +157,7 @@ class UPPAnd extends UPPBinOp {
     }//UPPAnd
     
     public String toString(){
-        return "(" + e1.toString() + ") and (" + e2.toString() + ")" ;
+        return "(" + e1.toString() + ") AND (" + e2.toString() + ")" ;
     }
 
 }//UPPAnd
@@ -168,7 +170,7 @@ class UPPOr extends UPPBinOp {
     }//UPPOr
     
     public String toString(){
-        return "(" + e1.toString() + ") or (" + e2.toString() + ")" ;
+        return "(" + e1.toString() + ") OR (" + e2.toString() + ")" ;
     }
 
 }//UPPOr
@@ -286,7 +288,7 @@ class UPPLoad extends UPPExpr {
     }//UPPLoad
     
     public String toString(){
-        return "Reading at the address: "+ addr.toString();
+        return "Lit les informations a l'adresse suivante: "+ addr.toString();
     }
 
 }//UPPLoad
@@ -323,10 +325,26 @@ class UPPStore extends UPPInst {
     }//UPPStore
     
     public String toString(){
-        return "Storing at the address: "+ addr.toString() +" the value "+ val.toString();
+        return "Stocker a l'adresse suivante: "+ addr.toString() +" la valeur "+ val.toString();
     }
 
 }//UPPStore
+
+class UPPWhile extends UPPInst {
+
+    UPPExpr cond;
+    UPPInst i;
+
+    UPPWhile (UPPExpr cond, UPPInst i) {
+        this.cond = cond;
+        this.i = i;
+    }//UPPWhile
+    
+    public String toString(){
+        return "while " + cond.toString() + " do " + i.toString();
+    }
+
+}//UPPWhile
 
 class UPPCond extends UPPInst {
 
@@ -345,22 +363,6 @@ class UPPCond extends UPPInst {
 
 }//UPPCond
 
-class UPPWhile extends UPPInst {
-
-    UPPExpr cond;
-    UPPInst i;
-
-    UPPWhile (UPPExpr cond, UPPInst i) {
-        this.cond = cond;
-        this.i = i;
-    }//UPPWhile
-    
-    public String toString(){
-        return "while " + cond.toString() + " do " + i.toString();
-    }
-
-}//UPPWhile
-
 class UPPProcCall extends UPPInst {
 
     Callee callee;
@@ -372,7 +374,7 @@ class UPPProcCall extends UPPInst {
     }//UPPProcCall
     
     public String toString(){
-        return callee.toString() + " (" + args.toString() + ")";
+        return callee.toString() + "(" + args.toString() + ")";
     }
 
 }//UPPProcCall
@@ -380,7 +382,7 @@ class UPPProcCall extends UPPInst {
 class UPPSkip extends UPPInst {
 
     public String toString(){
-        return "skip";
+        return "Passer";
     }
     
 }//UPPSkip
@@ -399,6 +401,29 @@ class UPPSeq extends UPPInst {
     }
 
 }//UPPSeq
+
+/************/
+/* Programs */
+/************/
+
+class UPPProg {
+
+    ArrayList<String> globals;
+    ArrayList<UPPDef> defs;
+    UPPInst code;
+
+    UPPProg (ArrayList<String> globals, ArrayList<UPPDef> defs, UPPInst code) {
+        this.globals = globals;
+        this.defs = defs;
+        this.code = code;
+    }//UPPProg
+    
+    public String toString(){
+        return   "variable " + globals.toString() + " " + defs.toString() + " " + code.toString();
+    }
+
+}//UPPProg
+
 
 /***************************************/
 /* Definitions of functions/procedures */
@@ -426,7 +451,7 @@ class UPPFun extends UPPDef {
     }//UPPFun
     
     public String toString(){
-        return name.toString() + "(" + args.toString() + ") var " + locals.toString() + " " + code.toString();
+        return name.toString() + "(" + args.toString() + ") variable " + locals.toString() + " " + code.toString();
     }
 
 }//UPPFun
@@ -442,29 +467,8 @@ class UPPProc extends UPPDef {
     }//UPPProc
     
     public String toString(){
-        return name.toString() + "(" + args.toString() + ") var " + locals.toString() + " " + code.toString();
+        return name.toString() + "(" + args.toString() + ") variable " + locals.toString() + " " + code.toString();
     }
 
 }//UPPProc
 
-/************/
-/* Programs */
-/************/
-
-class UPPProg {
-
-    ArrayList<String> globals;
-    ArrayList<UPPDef> defs;
-    UPPInst code;
-
-    UPPProg (ArrayList<String> globals, ArrayList<UPPDef> defs, UPPInst code) {
-        this.globals = globals;
-        this.defs = defs;
-        this.code = code;
-    }//UPPProg
-    
-    public String toString(){
-        return   "var " + globals.toString() + " " + defs.toString() + " " + code.toString();
-    }
-
-}//UPPProg
