@@ -8,7 +8,7 @@ import java.util.*;
 
 abstract class UPPExpr {
     
-    public abstract String toString(); //Printer for UPP
+    public abstract String toString();
     
 }//UPPExpr
 
