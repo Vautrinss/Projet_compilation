@@ -247,7 +247,7 @@ class UPPAnd extends UPPBinOp {
     }//toRTL
     
     public String toString(){
-        return "(" + e1.toString() + ") and (" + e2.toString() + ")" ;
+        return "(" + e1.toString() + ") AND (" + e2.toString() + ")" ;
     }//toString
 
 }//UPPAnd
@@ -269,7 +269,7 @@ class UPPOr extends UPPBinOp {
     }//toRTL
     
     public String toString(){
-        return "(" + e1.toString() + ") or (" + e2.toString() + ")" ;
+        return "(" + e1.toString() + ") OR (" + e2.toString() + ")" ;
     }//toString
     
 }//UPPOr
@@ -470,7 +470,7 @@ class UPPLoad extends UPPExpr {
     }//toRTL
     
     public String toString(){
-        return "Reading at the address: "+ addr.toString();
+        return "Lit les informations a l'adresse suivante: "+ addr.toString();
     }//toString
 
 }//UPPLoad
@@ -544,7 +544,7 @@ class UPPStore extends UPPInst {
     }//toRTL
     
     public String toString(){
-        return "Storing at the address: "+ addr.toString() +" the value "+ val.toString();
+        return "Stocker a l'adresse suivante: "+ addr.toString() +" la valeur "+ val.toString();
     }//toString
 
 }//UPPStore
@@ -639,7 +639,7 @@ class UPPSkip extends UPPInst {
     }//toRTL
     
     public String toString(){
-        return "skip";
+        return "Passer";
     }//toString
 
 }//UPPSkip
@@ -665,6 +665,42 @@ class UPPSeq extends UPPInst {
     }//toString
 
 }//UPPSeq
+
+/************/
+/* Programs */
+/************/
+
+class UPPProg {
+
+    ArrayList<String> globals;
+    ArrayList<UPPDef> defs;
+    UPPInst code;
+
+    UPPProg (ArrayList<String> globals, ArrayList<UPPDef> defs, UPPInst code) {
+        this.globals = globals;
+        this.defs = defs;
+        this.code = code;
+    }//UPPProg
+
+    RTLProg toRTL () {
+        ArrayList<String> args = new ArrayList<String>();
+        ArrayList<String> locals = new ArrayList<String>();
+        UPPDef mainProc = new UPPProc("_main",args,locals,code);
+        defs.add(mainProc);
+        ArrayList<RTLDef> ndefs = new ArrayList<RTLDef>();
+        for (UPPDef e : defs) {
+            ndefs.add(e.toRTL(globals));
+            PRegister.reset();
+        }//for
+        return new RTLProg(globals,ndefs);
+    }//toRTL
+    
+    public String toString(){
+        return   "variable " + globals.toString() + " " + defs.toString() + " " + code.toString();
+    }//toString
+
+}//UPPProg
+
 
 /***************************************/
 /* Definitions of functions/procedures */
@@ -718,7 +754,7 @@ class UPPFun extends UPPDef {
     }//toRTL
     
     public String toString(){
-        return name.toString() + "(" + args.toString() + ") var " + locals.toString() + " " + code.toString();
+        return name.toString() + "(" + args.toString() + ") variable " + locals.toString() + " " + code.toString();
     }//toString
 
 }//UPPFun
@@ -755,42 +791,7 @@ class UPPProc extends UPPDef {
     }//toRTL
     
     public String toString(){
-        return name.toString() + "(" + args.toString() + ") var " + locals.toString() + " " + code.toString();
+        return name.toString() + "(" + args.toString() + ") variable " + locals.toString() + " " + code.toString();
     }//toString
 
 }//UPPProc
-
-/************/
-/* Programs */
-/************/
-
-class UPPProg {
-
-    ArrayList<String> globals;
-    ArrayList<UPPDef> defs;
-    UPPInst code;
-
-    UPPProg (ArrayList<String> globals, ArrayList<UPPDef> defs, UPPInst code) {
-        this.globals = globals;
-        this.defs = defs;
-        this.code = code;
-    }//UPPProg
-
-    RTLProg toRTL () {
-        ArrayList<String> args = new ArrayList<String>();
-        ArrayList<String> locals = new ArrayList<String>();
-        UPPDef mainProc = new UPPProc("_main",args,locals,code);
-        defs.add(mainProc);
-        ArrayList<RTLDef> ndefs = new ArrayList<RTLDef>();
-        for (UPPDef e : defs) {
-            ndefs.add(e.toRTL(globals));
-            PRegister.reset();
-        }//for
-        return new RTLProg(globals,ndefs);
-    }//toRTL
-    
-    public String toString(){
-        return   "var " + globals.toString() + " " + defs.toString() + " " + code.toString();
-    }//toString
-
-}//UPPProg
