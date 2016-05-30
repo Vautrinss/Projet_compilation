@@ -567,7 +567,7 @@ class UPPCond extends UPPInst {
         RTLInst ni2 = i2.toRTL(locals,globals,succ);
         RTLGtz gtz = new RTLGtz(regCond,ni1,ni2);
         RTLInst ncond = cond.toRTL(locals,globals,regCond,gtz);
-        return ncond;
+        return ncond;//done
        
     }//toRTL
     
