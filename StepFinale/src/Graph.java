@@ -44,17 +44,92 @@ public class Graph {
 	
 	
 	public void coloring(int k){
-		int i = 1;
-		Vertex v1 = new Vertex();
+		int i = k;
+		Vertex v1;
+		/*ArrayList<Edge> listePrefTemp = listePref;
+		ArrayList<Edge> listeInterTemp = listeInter;
+		Edge e;*/
 		while(listeSommet.isEmpty()!= true) {
-			if(trivialVertex()) { // si il y a un sommet trivialement coloriable
-				v1 = getTrivialVertex();
-				int color = findColor(v1, k); // regarde les couleur dispo en fonction des voisins
-				v1.setColor(color);
+			v1 = getTrivialVertex(k);
+			if(/*trivialVertex() &&*/v1.existing == true) { // si il y a un sommet trivialement coloriable et qu'il existe encore
+				v1.existing = false;
+				if(i>0){
+					v1.color = findColor(v1, k); // regarde les couleur dispo en fonction des voisins
+				}
+				else {
+					v1.color = 0; // 0=spill
+				}
+
 			}
 			else{
-				spilling();
+				v1.color = 0;
 			}
 		}
+		
+
 	}
+	
+	@SuppressWarnings("null")
+	public int findColor(Vertex v, int k) {
+		ArrayList<Integer> listColor = null;
+		ArrayList<Edge> listeInterTemp = listeInter;
+		Edge e;
+		
+		while(k>0) {
+			listColor.add(k);
+			k--;
+		}
+		
+		while(listeInterTemp.isEmpty() != true){
+			e = listeInterTemp.get(1);
+			if(e.sommet1 == v) {
+				listColor.remove(e.sommet2.color);
+			}
+			else if(e.sommet2 == v){
+				listColor.remove(e.sommet1.color);
+			}
+			listeInterTemp.remove(e);
+		}
+		return listColor.get(0);
+	}
+	
+	public Vertex getTrivialVertex(int k){
+		ArrayList<Vertex> ListeSommetTemp = listeSommet;
+		Vertex v;
+		Vertex v1 = null;
+		for(int i = 0; i< ListeSommetTemp.size(); i++){
+			v = ListeSommetTemp.get(i);
+			if(getDegree(v)<k){
+				v1 = v;
+			}
+			else{
+				i++;
+			}	
+		}
+		return v1;
+	}
+	
+	public int getDegree(Vertex v){
+		int j=0;
+		ArrayList<Edge> listeInterTemp = listeInter;
+		Edge e;
+		
+		while(listeInterTemp.isEmpty() != true){
+			e = listeInterTemp.get(1);
+			if(e.sommet1 == v) {
+				j++;
+			}
+			else if(e.sommet2 == v){
+				j++;
+			}
+			listeInterTemp.remove(e);
+		}
+		return j;
+	} 
+	
+	/*public boolean TrivialVertex(){
+		if
+	}*/
+	
+	
 }

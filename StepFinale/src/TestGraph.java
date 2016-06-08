@@ -1,0 +1,32 @@
+
+public class TestGraph {
+
+	
+	
+	public static void main(String[] args) {
+		Vertex v1 = new Vertex("A");
+		Vertex v2 = new Vertex("B");
+		Vertex v3 = new Vertex("C");
+		Vertex v4 = new Vertex("D");
+		
+		Edge e1 = new Edge(v1, v2, true);
+		Edge e2 = new Edge(v1, v4, true);
+		Edge e3 = new Edge(v2, v3, true);
+		Edge e4 = new Edge(v2, v4, true);
+		
+		Graph g = new Graph();
+		g.listeSommet.add(v1);
+		g.listeSommet.add(v2);
+		g.listeSommet.add(v3);
+		g.listeSommet.add(v4);
+		
+		g.listeInter.add(e1);
+		g.listeInter.add(e2);
+		g.listeInter.add(e3);
+		g.listeInter.add(e4);
+		
+		g.coloring(3);
+		
+		
+	}
+}

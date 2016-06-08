@@ -1,13 +1,13 @@
 public class Vertex {
 
 	String name;
-	int color;
-	boolean existing;
+	int color = -1;
+	boolean existing = true;
 
 	public Vertex(String n){
 		this.name= n;
 		this.color = -1;
-		this.existing = false;
+		this.existing = true;
 	}
 
 	public String getName() { 
