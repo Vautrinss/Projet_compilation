@@ -1,10 +1,7 @@
 
 public class TestGraph {
 
-	
 	public static void main(String[] args) {
-		
-		Graph g = new Graph();
 		Vertex v1 = new Vertex("A");
 		Vertex v2 = new Vertex("B");
 		Vertex v3 = new Vertex("C");
@@ -15,6 +12,7 @@ public class TestGraph {
 		Edge e3 = new Edge(v2, v3, true);
 		Edge e4 = new Edge(v2, v4, true);
 		
+		Graph g = new Graph();
 		g.listeSommet.add(v1);
 		g.listeSommet.add(v2);
 		g.listeSommet.add(v3);
